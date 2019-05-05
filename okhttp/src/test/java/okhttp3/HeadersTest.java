@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import okhttp3.internal.Internal;
 import okhttp3.internal.Util;
-import okhttp3.internal.http.HttpHeaders;
+import okhttp3.internal.http.HttpHeadersKt;
 import okhttp3.internal.http2.Header;
 import okhttp3.internal.http2.Http2ExchangeCodec;
 import org.junit.Ignore;
@@ -440,7 +440,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest realm=\"myrealm\", nonce=\"fjalskdflwejrlaskdfjlaskdjflaks"
             + "jdflkasdf\", qop=\"auth\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -457,7 +457,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest qop=\"auth\", realm=\"myrealm\", nonce=\"fjalskdflwejrlask"
             + "dfjlaskdjflaksjdflkasdf\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -474,7 +474,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest qop=\"auth\", nonce=\"fjalskdflwejrlaskdfjlaskdjflaksjdflk"
             + "asdf\", realm=\"myrealm\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -491,7 +491,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest qop=\"auth\", underrealm=\"myrealm\", nonce=\"fjalskdflwej"
             + "rlaskdfjlaskdjflaksjdflkasdf\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isNull();
@@ -508,7 +508,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest qop=\"auth\",    realm=\"myrealm\", nonce=\"fjalskdflwejrl"
             + "askdfjlaskdjflaksjdflkasdf\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -525,7 +525,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest    realm=\"myrealm\", nonce=\"fjalskdflwejrlaskdfjlaskdjfl"
             + "aksjdflkasdf\", qop=\"auth\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -542,7 +542,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "DiGeSt qop=\"auth\", rEaLm=\"myrealm\", nonce=\"fjalskdflwejrlask"
             + "dfjlaskdjflaksjdflkasdf\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("DiGeSt");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -560,7 +560,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "DIgEsT rEaLm=\"myrealm\", nonce=\"fjalskdflwejrlaskdfjlaskdjflaks"
             + "jdflkasdf\", qop=\"auth\", stale=\"FALSE\"")
         .build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("DIgEsT");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -575,7 +575,7 @@ public final class HeadersTest {
   @Test public void testDigestChallengeWithTokenFormOfAuthParam() {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Digest realm=myrealm").build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isEqualTo("myrealm");
@@ -586,7 +586,7 @@ public final class HeadersTest {
     // Scheme only.
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Digest").build();
-    List<Challenge> challenges = HttpHeaders.parseChallenges(headers, "WWW-Authenticate");
+    List<Challenge> challenges = HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate");
     assertThat(challenges.size()).isEqualTo(1);
     assertThat(challenges.get(0).scheme()).isEqualTo("Digest");
     assertThat(challenges.get(0).realm()).isNull();
@@ -597,7 +597,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate: Basic realm=\"protected area\"")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(new Challenge("Basic", singletonMap("realm", "protected area"))));
   }
 
@@ -608,7 +608,7 @@ public final class HeadersTest {
     Map<String, String> expectedAuthParams = new LinkedHashMap<>();
     expectedAuthParams.put("realm", "protected area");
     expectedAuthParams.put("charset", "UTF-8");
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(new Challenge("Basic", expectedAuthParams)));
   }
 
@@ -620,7 +620,7 @@ public final class HeadersTest {
     Map<String, String> expectedAuthParams = new LinkedHashMap<>();
     expectedAuthParams.put("realm", "protected area");
     expectedAuthParams.put("charset", "US-ASCII");
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(new Challenge("Basic", expectedAuthParams)));
   }
 
@@ -628,7 +628,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", " ,  , Basic realm=myrealm")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(new Challenge("Basic", singletonMap("realm", "myrealm"))));
   }
 
@@ -636,7 +636,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Basic realm = \"myrealm\"")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(new Challenge("Basic", singletonMap("realm", "myrealm"))));
   }
 
@@ -644,7 +644,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Basic realm = \"myrealm\",Digest")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Basic", singletonMap("realm", "myrealm")),
         new Challenge("Digest", Collections.emptyMap()));
   }
@@ -653,7 +653,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Basic realm = \"myrealm\",Basic realm=myotherrealm")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Basic", singletonMap("realm", "myrealm")),
         new Challenge("Basic", singletonMap("realm", "myotherrealm")));
   }
@@ -662,7 +662,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Digest, Basic ,,realm=\"myrealm\"")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "myrealm")));
   }
@@ -671,7 +671,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Digest,Basic realm=\"myrealm\"")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "myrealm")));
   }
@@ -680,7 +680,7 @@ public final class HeadersTest {
     Headers headers = new Headers.Builder()
         .add("WWW-Authenticate", "Digest,,,, Basic ,,realm=\"myrealm\"")
         .build();
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "myrealm")));
   }
@@ -693,7 +693,7 @@ public final class HeadersTest {
     Map<String, String> expectedAuthParams = new LinkedHashMap<>();
     expectedAuthParams.put("realm", "myrealm");
     expectedAuthParams.put("foo", "bar");
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", expectedAuthParams));
   }
@@ -703,7 +703,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest,,,, Basic ,,,realm=\"my\\\\\\\"r\\ealm\"")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "my\\\"realm")));
   }
@@ -713,7 +713,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", ",Digest,,,, Basic ,,,realm=\"my, realm,\"")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "my, realm,")));
   }
@@ -723,7 +723,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest,,,, Basic ,,,realm=\"my\\\\\\\\\"r\\ealm\"")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()));
   }
 
@@ -732,7 +732,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest,,,, Basic ,,,realm=\"my\"realm\"")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()));
   }
 
@@ -742,7 +742,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest,,,, Basic ,,,realm=my\"realm")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()));
   }
 
@@ -751,7 +751,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Other abc==")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         singletonList(
         new Challenge("Other", singletonMap(null, "abc=="))));
   }
@@ -761,7 +761,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Other abc==, realm=myrealm")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Other", singletonMap(null, "abc==")));
   }
 
@@ -770,7 +770,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Other realm=myotherrealm, realm=myrealm")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).isEqualTo(
         emptyList());
   }
 
@@ -780,7 +780,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Basic realm=myrealm")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Digest", Collections.emptyMap()),
         new Challenge("Basic", singletonMap("realm", "myrealm")));
   }
@@ -791,7 +791,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Digest")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Basic", singletonMap("realm", "myrealm")),
         new Challenge("Digest", Collections.emptyMap()));
   }
@@ -802,7 +802,7 @@ public final class HeadersTest {
         .add("WWW-Authenticate", "Basic realm=myotherrealm")
         .build();
 
-    assertThat(HttpHeaders.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
+    assertThat(HttpHeadersKt.parseChallenges(headers, "WWW-Authenticate")).containsExactly(
         new Challenge("Basic", singletonMap("realm", "myrealm")),
         new Challenge("Basic", singletonMap("realm", "myotherrealm")));
   }

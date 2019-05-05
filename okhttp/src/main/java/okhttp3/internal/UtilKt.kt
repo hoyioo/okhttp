@@ -15,6 +15,8 @@
  */
 package okhttp3.internal
 
+import okhttp3.Response
+import okio.Buffer
 import okio.BufferedSink
 import okio.BufferedSource
 import java.io.IOException
@@ -35,4 +37,57 @@ fun BufferedSource.readMedium(): Int {
   return (readByte() and 0xff shl 16
       or (readByte() and 0xff shl 8)
       or (readByte() and 0xff))
+}
+
+fun Buffer.skipAll(b: Byte): Int {
+  var count = 0
+  while (!exhausted() && this[0] == b) {
+    count++
+    readByte()
+  }
+  return count
+}
+
+/**
+ * Returns the index of the next non-whitespace character in this. Result is undefined if input
+ * contains newline characters.
+ */
+fun String.indexOfNonWhitespace(startIndex: Int = 0): Int {
+  for (i in startIndex until length) {
+    val c = this[i]
+    if (c != ' ' && c != '\t') {
+      return i
+    }
+  }
+  return length
+}
+
+/** Returns the Content-Length as reported by the response headers. */
+fun Response.headersContentLength(): Long {
+  return headers()["Content-Length"]?.toLongOrDefault(-1L) ?: -1L
+}
+
+fun String.toLongOrDefault(defaultValue: Long): Long {
+  return try {
+    toLong()
+  } catch (_: NumberFormatException) {
+    defaultValue
+  }
+}
+
+/**
+ * Returns this as a non-negative integer, or 0 if it is negative, or [Int.MAX_VALUE] if it is too
+ * large, or [defaultValue] if it cannot be parsed.
+ */
+fun String?.toNonNegativeInt(defaultValue: Int): Int {
+  try {
+    val value = this?.toLong() ?: return defaultValue
+    return when {
+      value > Int.MAX_VALUE -> Int.MAX_VALUE
+      value < 0 -> 0
+      else -> value.toInt()
+    }
+  } catch (_: NumberFormatException) {
+    return defaultValue
+  }
 }
